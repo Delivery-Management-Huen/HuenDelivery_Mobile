@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:huen_delivery_mobile/screens/MainScreen.dart';
 import 'package:huen_delivery_mobile/screens/login_screen.dart';
 
 void main() {
@@ -11,6 +12,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: LoginScreen(),
+      routes: {
+        '/main': (context) => MainScreen(),
+        '/login': (context) => LoginScreen(),
+      },
     );
   }
 }
