@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:huen_delivery_mobile/screens/MainScreen.dart';
+import 'package:huen_delivery_mobile/screens/main_screen.dart';
 import 'package:huen_delivery_mobile/screens/login_screen.dart';
 
 void main() {
