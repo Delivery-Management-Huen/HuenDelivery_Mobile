@@ -7,12 +7,14 @@ class Palette {
   static Color blueE5E5E5 = _hexToRGBOColor('E5E5E5');
   static Color blueE2E8F1 = _hexToRGBOColor('E2E8F1');
   static Color blue6685A8 = _hexToRGBOColor('6685A8');
+
   static Color grayFAFAFA = _hexToRGBOColor('FAFAFA');
   static Color grayF1F3F5 = _hexToRGBOColor('F1F3F5');
   static Color grayDCDCDC = _hexToRGBOColor('DCDCDC');
   static Color grayC4C4C4 = _hexToRGBOColor('C4C4C4');
   static Color gray8E8E8E = _hexToRGBOColor('8E8E8E');
   static Color gray444444 = _hexToRGBOColor('444444');
+  static Color gray141414 = _hexToRGBOColor('141414');
 
   static Color _hexToRGBOColor(String hexCode) {
     String hexR = hexCode.substring(0, 2);
