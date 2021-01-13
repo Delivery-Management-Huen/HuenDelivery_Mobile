@@ -1,13 +1,27 @@
 import 'package:huen_delivery_mobile/models/Delivery.dart';
 
 class DeliveryNetwork {
-  List<Delivery> getDeliveries() {
-    return [
+  Future<List<Delivery>> getDeliveries() async {
+    var d1 = Delivery();
+    var d2 = Delivery();
+    var d3 = Delivery();
+    var d4 = Delivery();
+
+    d1.id = 1;
+    // d1.address = '서울시 마포구 영등포역';
+
+    d2.id = 2;
+    d1.address = '서울시 마포구 영등포역';
+
+    var list = [
       Delivery(),
-      Delivery(),
+      d1,
+      d2,
       Delivery(),
       Delivery(),
       Delivery(),
     ];
+
+    return list;
   }
 }

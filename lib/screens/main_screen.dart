@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:huen_delivery_mobile/components/delivery/delivery_view.dart';
 import 'package:huen_delivery_mobile/models/Delivery.dart';
 import 'package:huen_delivery_mobile/notifiers/deliveries_notifier.dart';
+import 'package:huen_delivery_mobile/third_party/google_third_party.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -12,24 +13,43 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final GoogleThirdParty _googleThirdParty = GoogleThirdParty();
+  final List<Marker> _markers = [];
+
   @override
   void initState() {
     DeliveriesNotifier deliveriesNotifier =
         Provider.of<DeliveriesNotifier>(context, listen: false);
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       deliveriesNotifier.fetchDeliveries();
     });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Size deviceSize = MediaQuery.of(context).size;
     DeliveriesNotifier deliveriesNotifier =
         Provider.of<DeliveriesNotifier>(context);
 
+    Size deviceSize = MediaQuery.of(context).size;
     List<Delivery> deliveries = deliveriesNotifier.getDeliveries();
+
+    for (Delivery delivery in deliveriesNotifier.getDeliveries()) {
+      Marker marker = Marker(
+        markerId: MarkerId(delivery.id.toString()),
+        position: delivery.addressPoint,
+        infoWindow: InfoWindow(
+          title: delivery.productName,
+          snippet: delivery.address,
+        ),
+      );
+
+      setState(() {
+        _markers.add(marker);
+      });
+    }
 
     return Scaffold(
       body: deliveriesNotifier == null
@@ -41,9 +61,11 @@ class _MainScreenState extends State<MainScreen> {
                 Container(
                   height: deviceSize.height * 0.6,
                   child: GoogleMap(
+                    markers: _markers.toSet(),
                     initialCameraPosition: CameraPosition(
-                        target: LatLng(35.82765238011889, 128.61770061419432),
-                        zoom: 16.0),
+                      target: LatLng(37.576183893224865, 126.97665492505988),
+                      zoom: 10.0,
+                    ),
                   ),
                 ),
                 Expanded(
