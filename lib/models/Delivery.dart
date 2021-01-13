@@ -1,4 +1,4 @@
 class Delivery {
-  num id;
-  String productName;
+  num id = 1;
+  String productName = '물품';
 }
