@@ -16,12 +16,11 @@ class MyApp extends StatelessWidget {
       home: LoginScreen(),
       routes: {
         '/main': (context) => ChangeNotifierProvider<DeliveriesNotifier>(
-            create: (context)=> DeliveriesNotifier(),
-            child: MainScreen(),
-        ),
+              create: (context) => DeliveriesNotifier(),
+              child: MainScreen(),
+            ),
         '/login': (context) => LoginScreen(),
       },
     );
   }
 }
-
