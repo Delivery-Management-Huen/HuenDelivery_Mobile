@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:huen_delivery_mobile/components/delivery/delivery_view.dart';
 import 'package:huen_delivery_mobile/models/Delivery.dart';
 import 'package:huen_delivery_mobile/notifiers/deliveries_notifier.dart';
@@ -24,6 +25,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size deviceSize = MediaQuery.of(context).size;
     DeliveriesNotifier deliveriesNotifier =
         Provider.of<DeliveriesNotifier>(context);
 
@@ -36,9 +38,14 @@ class _MainScreenState extends State<MainScreen> {
             )
           : Column(
               children: [
-                RaisedButton(
-                    onPressed: () =>
-                        deliveriesNotifier.addDelivery(Delivery())),
+                Container(
+                  height: deviceSize.height * 0.6,
+                  child: GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                        target: LatLng(35.82765238011889, 128.61770061419432),
+                        zoom: 16.0),
+                  ),
+                ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: deliveries.length,

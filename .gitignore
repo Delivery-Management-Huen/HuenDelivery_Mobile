@@ -2,6 +2,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,flutter,androidstudio
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,flutter,androidstudio
 
+ios/Runner/Config.swift
+
 .vscode
 lib/config/
 
