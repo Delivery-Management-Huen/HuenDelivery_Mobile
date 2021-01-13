@@ -1,13 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:huen_delivery_mobile/components/delivery/delivery_view_model.dart';
+import 'package:huen_delivery_mobile/models/Delivery.dart';
 import 'package:huen_delivery_mobile/styles/palette.dart';
 
 class DeliveryView extends StatefulWidget {
+  final Delivery delivery;
+  DeliveryView({@required this.delivery});
+
   @override
-  State<StatefulWidget> createState() => _DeliveryViewState();
+  State<StatefulWidget> createState() => _DeliveryViewState(delivery);
 }
 
 class _DeliveryViewState extends State<DeliveryView> {
+  Delivery delivery;
+  DeliveryViewModel deliveryViewModel;
+
+  _DeliveryViewState(this.delivery) {
+    deliveryViewModel = new DeliveryViewModel();
+    deliveryViewModel.setDelivery(delivery);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,7 +43,7 @@ class _DeliveryViewState extends State<DeliveryView> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '물품1',
+                      deliveryViewModel.delivery.productName,
                       style: TextStyle(
                         fontSize: 14,
                         color: Palette.gray141414,
@@ -39,7 +52,7 @@ class _DeliveryViewState extends State<DeliveryView> {
                     ),
                     SizedBox(width: 10),
                     Text(
-                      'chlwlsdn',
+                      deliveryViewModel.delivery.productName,
                       style: TextStyle(
                         fontSize: 11,
                         color: Palette.gray444444,
@@ -49,7 +62,7 @@ class _DeliveryViewState extends State<DeliveryView> {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  '서울 특별시 어디구 어디동 어디빌딩 어디층 어디호',
+                  deliveryViewModel.delivery.productName,
                   style: TextStyle(
                     fontSize: 10,
                     color: Palette.gray444444,
