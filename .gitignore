@@ -3,6 +3,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,flutter,androidstudio
 
 .vscode
+lib/config/
 
 ### Flutter ###
 # Flutter/Dart/Pub related
