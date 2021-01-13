@@ -12,27 +12,43 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   @override
+  void initState() {
+    DeliveriesNotifier deliveriesNotifier =
+        Provider.of<DeliveriesNotifier>(context, listen: false);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      deliveriesNotifier.fetchDeliveries();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    DeliveriesNotifier deliveriesNotifier = Provider.of<DeliveriesNotifier>(
-        context);
+    DeliveriesNotifier deliveriesNotifier =
+        Provider.of<DeliveriesNotifier>(context);
+
+    List<Delivery> deliveries = deliveriesNotifier.getDeliveries();
 
     return Scaffold(
-      body: Column(
-        children: [
-          RaisedButton(onPressed: () => deliveriesNotifier.addDelivery(Delivery())),
-          Expanded(
-            child: ListView.builder(
-                itemCount: deliveriesNotifier
-                    .getDeliveries()
-                    .length,
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, int index) =>
-                    DeliveryView(
-                        delivery: deliveriesNotifier.getDeliveries()[index]),
+      body: deliveriesNotifier == null
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                RaisedButton(
+                    onPressed: () =>
+                        deliveriesNotifier.addDelivery(Delivery())),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: deliveries.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) =>
+                        DeliveryView(delivery: deliveries[index]),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }
