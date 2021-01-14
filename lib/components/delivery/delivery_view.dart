@@ -24,7 +24,6 @@ class _DeliveryViewState extends State<DeliveryView> {
   DeliveryViewModel deliveryViewModel;
 
   _DeliveryViewState(this.delivery, this.moveCamera) {
-    print(this.moveCamera);
     deliveryViewModel = new DeliveryViewModel();
     deliveryViewModel.setDelivery(delivery);
   }
