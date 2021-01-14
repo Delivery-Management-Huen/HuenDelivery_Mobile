@@ -50,8 +50,18 @@ class _MainScreenState extends State<MainScreen> {
     _mapController = controller;
   }
 
-  _moveCamera(LatLng point) {
-    _mapController.moveCamera(CameraUpdate.newLatLng(point));
+  _moveCamera(num deliveryId) {
+    Marker marker;
+    for (Marker item in _markers) {
+      if (item.markerId.value == deliveryId.toString()) {
+        marker = item;
+        break;
+      }
+    }
+    if (marker == null) return;
+
+    _mapController.moveCamera(CameraUpdate.newLatLng(marker.position));
+    _mapController.showMarkerInfoWindow(marker.markerId);
   }
 
   @override

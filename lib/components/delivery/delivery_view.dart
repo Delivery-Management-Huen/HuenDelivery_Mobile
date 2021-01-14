@@ -33,7 +33,7 @@ class _DeliveryViewState extends State<DeliveryView> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        moveCamera(deliveryViewModel.delivery.addressPoint);
+        moveCamera(deliveryViewModel.delivery.id);
       },
       child: Container(
         padding: const EdgeInsets.all(8),
