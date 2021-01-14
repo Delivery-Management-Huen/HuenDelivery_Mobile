@@ -41,7 +41,9 @@ class _MainScreenState extends State<MainScreen> {
       );
 
       setState(() {
-        _markers.add(marker);
+        if (marker.position != null){
+          _markers.add(marker);
+        }
       });
     }
   }
@@ -97,9 +99,9 @@ class _MainScreenState extends State<MainScreen> {
                     itemCount: deliveries.length,
                     itemBuilder: (BuildContext context, int index) =>
                         DeliveryView(
-                            delivery: deliveries[index],
-                            moveCamera: _moveCamera,
-                        ),
+                      delivery: deliveries[index],
+                      moveCamera: _moveCamera,
+                    ),
                   ),
                 ),
               ],
