@@ -8,18 +8,21 @@ class DeliveryNetwork {
     var d4 = Delivery();
 
     d1.id = 1;
-    // d1.address = '서울시 마포구 영등포역';
 
     d2.id = 2;
-    d1.address = '서울시 마포구 영등포역';
+    d2.address = '서울시 마포구 영등포역';
+
+    d3.id = 3;
+    d3.address = '서울시 광화문';
+
+    d4.id = 4;
+    d4.address = '서울시 경복궁';
 
     var list = [
-      Delivery(),
       d1,
       d2,
-      Delivery(),
-      Delivery(),
-      Delivery(),
+      d3,
+      d4,
     ];
 
     return list;

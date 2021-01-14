@@ -12,16 +12,16 @@ class DeliveriesNotifier with ChangeNotifier {
   void fetchDeliveries() {
     _deliveries = [];
     _deliveryNetwork.getDeliveries()
-    .then((deliveries) => {
-      _deliveries = deliveries,
-      notifyListeners(),
+    .then((deliveries) {
+      _deliveries = deliveries;
+      notifyListeners();
 
       for (final delivery in _deliveries) {
         _googleThirdParty.convertAddress(delivery.address)
-        .then((addressPoint) => {
-          delivery.addressPoint = addressPoint,
-          notifyListeners(),
-        })
+        .then((addressPoint) {
+          delivery.addressPoint = addressPoint;
+          notifyListeners();
+        });
       }
     });
 

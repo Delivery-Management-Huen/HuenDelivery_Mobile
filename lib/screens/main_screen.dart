@@ -13,8 +13,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final GoogleThirdParty _googleThirdParty = GoogleThirdParty();
   final List<Marker> _markers = [];
+  GoogleMapController _mapController;
 
   @override
   void initState() {
@@ -28,15 +28,9 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    DeliveriesNotifier deliveriesNotifier =
-        Provider.of<DeliveriesNotifier>(context);
-
-    Size deviceSize = MediaQuery.of(context).size;
-    List<Delivery> deliveries = deliveriesNotifier.getDeliveries();
-
-    for (Delivery delivery in deliveriesNotifier.getDeliveries()) {
+  _initMarkers(List<Delivery> deliveries) {
+    _markers.clear();
+    for (Delivery delivery in deliveries) {
       Marker marker = Marker(
         markerId: MarkerId(delivery.id.toString()),
         position: delivery.addressPoint,
@@ -50,6 +44,25 @@ class _MainScreenState extends State<MainScreen> {
         _markers.add(marker);
       });
     }
+  }
+
+  _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
+  }
+
+  _moveCamera(LatLng point) {
+    _mapController.moveCamera(CameraUpdate.newLatLng(point));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    DeliveriesNotifier deliveriesNotifier =
+        Provider.of<DeliveriesNotifier>(context);
+
+    Size deviceSize = MediaQuery.of(context).size;
+    List<Delivery> deliveries = deliveriesNotifier.getDeliveries();
+
+    _initMarkers(deliveries);
 
     return Scaffold(
       body: deliveriesNotifier == null
@@ -62,6 +75,7 @@ class _MainScreenState extends State<MainScreen> {
                   height: deviceSize.height * 0.6,
                   child: GoogleMap(
                     markers: _markers.toSet(),
+                    onMapCreated: _onMapCreated,
                     initialCameraPosition: CameraPosition(
                       target: LatLng(37.576183893224865, 126.97665492505988),
                       zoom: 10.0,
@@ -71,9 +85,11 @@ class _MainScreenState extends State<MainScreen> {
                 Expanded(
                   child: ListView.builder(
                     itemCount: deliveries.length,
-                    shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) =>
-                        DeliveryView(delivery: deliveries[index]),
+                        DeliveryView(
+                            delivery: deliveries[index],
+                            moveCamera: _moveCamera,
+                        ),
                   ),
                 ),
               ],
