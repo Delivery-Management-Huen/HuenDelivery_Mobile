@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:huen_delivery_mobile/models/Delivery.dart';
-import 'package:huen_delivery_mobile/network/DeliveryNetwork.dart';
+import 'package:huen_delivery_mobile/models/delivery.dart';
+import 'package:huen_delivery_mobile/network/delivery_network.dart';
 import 'package:huen_delivery_mobile/third_party/google_third_party.dart';
 
 class DeliveriesNotifier with ChangeNotifier {
