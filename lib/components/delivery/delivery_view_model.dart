@@ -1,4 +1,4 @@
-import 'package:huen_delivery_mobile/models/Delivery.dart';
+import 'package:huen_delivery_mobile/models/delivery.dart';
 
 class DeliveryViewModel {
   Delivery _delivery;

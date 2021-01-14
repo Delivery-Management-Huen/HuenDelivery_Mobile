@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:huen_delivery_mobile/components/delivery/delivery_view.dart';
-import 'package:huen_delivery_mobile/models/Delivery.dart';
+import 'package:huen_delivery_mobile/models/delivery.dart';
 import 'package:huen_delivery_mobile/notifiers/deliveries_notifier.dart';
 import 'package:huen_delivery_mobile/third_party/google_third_party.dart';
 import 'package:provider/provider.dart';

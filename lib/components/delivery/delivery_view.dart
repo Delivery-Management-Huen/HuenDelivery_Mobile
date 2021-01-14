@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:huen_delivery_mobile/components/delivery/delivery_view_model.dart';
-import 'package:huen_delivery_mobile/models/Delivery.dart';
+import 'package:huen_delivery_mobile/models/delivery.dart';
 import 'package:huen_delivery_mobile/styles/palette.dart';
 
 class DeliveryView extends StatefulWidget {
