@@ -16,7 +16,7 @@ class DeliveryNetwork {
     d3.address = '서울시 광화문';
 
     d4.id = 4;
-    d4.address = '서울시 경복궁';
+    d4.address = '대구광역시 수성구 범물동 서한화성아파트';
 
     var list = [
       d1,

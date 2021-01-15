@@ -1,11 +1,30 @@
+import 'dart:async';
+import 'dart:isolate';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:huen_delivery_mobile/components/delivery/delivery_view.dart';
 import 'package:huen_delivery_mobile/models/delivery.dart';
 import 'package:huen_delivery_mobile/notifiers/deliveries_notifier.dart';
-import 'package:huen_delivery_mobile/third_party/google_third_party.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart';
+
+Socket connectSocket(String token) {
+  /**
+   * Socket
+   */
+  Socket socket = io(
+      'http://192.168.3.110:8080/driver',
+      OptionBuilder().setTransports(['websocket']).setQuery(
+          {'x-access-token': token}).build());
+
+  socket.connect();
+
+  return socket;
+}
 
 class MainScreenWrapper extends StatelessWidget {
   @override
@@ -25,6 +44,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final List<Marker> _markers = [];
   GoogleMapController _mapController;
+  LocalStorage _localStorage = new LocalStorage('auth');
 
   @override
   void initState() {
@@ -35,7 +55,18 @@ class _MainScreenState extends State<MainScreen> {
       deliveriesNotifier.fetchDeliveries();
     });
 
+    _initSocket();
     super.initState();
+  }
+
+  _initSocket() {
+    Socket socket = connectSocket(_localStorage.getItem('token'));
+    Timer.periodic(Duration(seconds: 5), (timer) {
+      getCurrentPosition().then(
+        (value) => socket.emit('send-driver-location',
+            {'lat': value.latitude, 'long': value.longitude}),
+      );
+    });
   }
 
   _initMarkers(List<Delivery> deliveries) {
@@ -51,7 +82,7 @@ class _MainScreenState extends State<MainScreen> {
       );
 
       setState(() {
-        if (marker.position != null){
+        if (marker.position != null) {
           _markers.add(marker);
         }
       });
