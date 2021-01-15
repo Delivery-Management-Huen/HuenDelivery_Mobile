@@ -51,7 +51,9 @@ class _MainScreenState extends State<MainScreen> {
       );
 
       setState(() {
-        _markers.add(marker);
+        if (marker.position != null){
+          _markers.add(marker);
+        }
       });
     }
   }

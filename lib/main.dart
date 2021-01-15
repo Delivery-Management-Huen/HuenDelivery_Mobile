@@ -14,12 +14,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isTokenExist = storage.getItem('token') == null;
-
-
+    bool isTokenExist = storage.getItem('token') != null;
 
     return MaterialApp(
-      home:  isTokenExist ? MainScreenWrapper() : LoginScreen(),
+      home: isTokenExist ? MainScreenWrapper() : LoginScreen(),
       routes: {
         '/main': (context) => MainScreenWrapper(),
         '/login': (context) => LoginScreen(),

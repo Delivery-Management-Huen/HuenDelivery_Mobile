@@ -20,6 +20,7 @@ class DeliveriesNotifier with ChangeNotifier {
         _googleThirdParty.convertAddress(delivery.address)
         .then((addressPoint) {
           delivery.addressPoint = addressPoint;
+          print(addressPoint);
           notifyListeners();
         });
       }
