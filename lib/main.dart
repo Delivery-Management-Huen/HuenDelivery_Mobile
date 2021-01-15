@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:huen_delivery_mobile/notifiers/deliveries_notifier.dart';
 import 'package:huen_delivery_mobile/screens/main_screen.dart';
 import 'package:huen_delivery_mobile/screens/login_screen.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -9,16 +10,16 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  LocalStorage storage = new LocalStorage('auth');
+
   @override
   Widget build(BuildContext context) {
+    bool isTokenExist = storage.getItem('token') != null;
+
     return MaterialApp(
-      home: LoginScreen(),
+      home: isTokenExist ? MainScreenWrapper() : LoginScreen(),
       routes: {
-        '/main': (context) => ChangeNotifierProvider<DeliveriesNotifier>(
-              create: (context) => DeliveriesNotifier(),
-              child: MainScreen(),
-            ),
+        '/main': (context) => MainScreenWrapper(),
         '/login': (context) => LoginScreen(),
       },
     );
