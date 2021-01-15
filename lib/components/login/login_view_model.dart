@@ -39,7 +39,6 @@ class LoginViewModel {
           throw UnexpectedResult('다시 시도해주세요');
       }
     } catch (err) {
-      print(err);
       if (err is UnexpectedResult) {
         throw err;
       }
