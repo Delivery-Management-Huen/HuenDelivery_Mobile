@@ -1,8 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:huen_delivery_mobile/components/login/login_view_model.dart';
 import 'package:huen_delivery_mobile/styles/palette.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  LoginViewModel _loginViewModel;
+
+  _LoginViewState() {
+    _loginViewModel = new LoginViewModel();
+  }
+
+  @override
+  void dispose() {
+    _loginViewModel.disposeController();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
@@ -23,6 +41,7 @@ class LoginView extends StatelessWidget {
             child: Column(
               children: [
                 TextField(
+                  controller: _loginViewModel.idController,
                   style: TextStyle(
                     fontSize: 12,
                     height: 0.5,
@@ -42,6 +61,7 @@ class LoginView extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 TextField(
+                  controller: _loginViewModel.pwController,
                   obscureText: true,
                   style: TextStyle(
                     fontSize: 12,
@@ -65,15 +85,33 @@ class LoginView extends StatelessWidget {
                   minWidth: deviceSize.width * 0.9,
                   height: 50,
                   child: RaisedButton(
-                    color: Palette.gray444444,
-                    child: Text(
-                      '로그인',
-                      style: TextStyle(
-                        color: Colors.white,
+                      color: Palette.gray444444,
+                      child: Text(
+                        '로그인',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    onPressed: () => Navigator.pushNamed(context, '/main'),
-                  ),
+                      onPressed: () {
+                        _loginViewModel
+                            .login()
+                            .then((value) =>
+                                Navigator.pushNamed(context, '/main'))
+                            .catchError((error) => showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      CupertinoAlertDialog(
+                                    title: Text('로그인 실패'),
+                                    content: Text(error.toString()),
+                                    actions: [
+                                      CupertinoDialogAction(
+                                        child: Text('확인'),
+                                        onPressed: () => Navigator.pop(context),
+                                      ),
+                                    ],
+                                  ),
+                                ));
+                      }),
                 ),
               ],
             ),
