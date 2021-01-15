@@ -7,6 +7,16 @@ import 'package:huen_delivery_mobile/notifiers/deliveries_notifier.dart';
 import 'package:huen_delivery_mobile/third_party/google_third_party.dart';
 import 'package:provider/provider.dart';
 
+class MainScreenWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => DeliveriesNotifier(),
+      child: MainScreen(),
+    );
+  }
+}
+
 class MainScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _MainScreenState();
@@ -97,9 +107,9 @@ class _MainScreenState extends State<MainScreen> {
                     itemCount: deliveries.length,
                     itemBuilder: (BuildContext context, int index) =>
                         DeliveryView(
-                            delivery: deliveries[index],
-                            moveCamera: _moveCamera,
-                        ),
+                      delivery: deliveries[index],
+                      moveCamera: _moveCamera,
+                    ),
                   ),
                 ),
               ],
