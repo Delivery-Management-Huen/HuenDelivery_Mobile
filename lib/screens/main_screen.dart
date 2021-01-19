@@ -14,19 +14,19 @@ import 'package:huen_delivery_mobile/util/token.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
-Socket connectSocket(String token) {
-  /**
-   * Socket
-   */
-  Socket socket = io(
-      'http://192.168.3.110:8080/driver',
-      OptionBuilder().setTransports(['websocket']).setQuery(
-          {'x-access-token': token}).build());
-
-  socket.connect();
-
-  return socket;
-}
+// Socket connectSocket(String token) {
+//   /**
+//    * Socket
+//    */
+//   Socket socket = io(
+//       'http://192.168.3.110:8080/driver',
+//       OptionBuilder().setTransports(['websocket']).setQuery(
+//           {'x-access-token': token}).build());
+//
+//   socket.connect();
+//
+//   return socket;
+// }
 
 class MainScreenWrapper extends StatelessWidget {
   @override
@@ -66,18 +66,18 @@ class _MainScreenState extends State<MainScreen> {
       }
     });
 
-    _initSocket();
+    // _initSocket();
   }
 
-  _initSocket() {
-    Socket socket = connectSocket(getToken());
-    Timer.periodic(Duration(seconds: 5), (timer) {
-      getCurrentPosition().then(
-        (value) => socket.emit('send-driver-location',
-            {'lat': value.latitude, 'long': value.longitude}),
-      );
-    });
-  }
+  // _initSocket() {
+  //   Socket socket = connectSocket(getToken());
+  //   Timer.periodic(Duration(seconds: 5), (timer) {
+  //     getCurrentPosition().then(
+  //       (value) => socket.emit('send-driver-location',
+  //           {'lat': value.latitude, 'long': value.longitude}),
+  //     );
+  //   });
+  // }
 
   _initMarkers(List<Delivery> deliveries) {
     _markers.clear();
