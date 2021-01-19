@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:huen_delivery_mobile/components/delivery/delivery_view.dart';
+import 'package:huen_delivery_mobile/exception/TokenException.dart';
 import 'package:huen_delivery_mobile/models/delivery.dart';
 import 'package:huen_delivery_mobile/notifiers/deliveries_notifier.dart';
-import 'package:localstorage/localstorage.dart';
+import 'package:huen_delivery_mobile/util/dialog.dart';
+import 'package:huen_delivery_mobile/util/token.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -44,23 +46,31 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final List<Marker> _markers = [];
   GoogleMapController _mapController;
-  LocalStorage _localStorage = new LocalStorage('auth');
 
   @override
   void initState() {
+    super.initState();
     DeliveriesNotifier deliveriesNotifier =
         Provider.of<DeliveriesNotifier>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      deliveriesNotifier.fetchDeliveries();
+      try {
+        await deliveriesNotifier.fetchDeliveries();
+      } catch (err) {
+        if (err is TokenException) {
+          Navigator.pushNamed(context, '/login');
+          showCustomDialog(context, '세션 만료', '다시 로그인해주세요');
+        } else {
+          showCustomDialog(context, '오류 발생', err.toString());
+        }
+      }
     });
 
     _initSocket();
-    super.initState();
   }
 
   _initSocket() {
-    Socket socket = connectSocket(_localStorage.getItem('token'));
+    Socket socket = connectSocket(getToken());
     Timer.periodic(Duration(seconds: 5), (timer) {
       getCurrentPosition().then(
         (value) => socket.emit('send-driver-location',
@@ -73,11 +83,11 @@ class _MainScreenState extends State<MainScreen> {
     _markers.clear();
     for (Delivery delivery in deliveries) {
       Marker marker = Marker(
-        markerId: MarkerId(delivery.id.toString()),
+        markerId: MarkerId(delivery.idx.toString()),
         position: delivery.addressPoint,
         infoWindow: InfoWindow(
           title: delivery.productName,
-          snippet: delivery.address,
+          snippet: delivery.customer.address,
         ),
       );
 
@@ -112,8 +122,9 @@ class _MainScreenState extends State<MainScreen> {
     DeliveriesNotifier deliveriesNotifier =
         Provider.of<DeliveriesNotifier>(context);
 
-    Size deviceSize = MediaQuery.of(context).size;
     List<Delivery> deliveries = deliveriesNotifier.getDeliveries();
+
+    Size deviceSize = MediaQuery.of(context).size;
 
     _initMarkers(deliveries);
 

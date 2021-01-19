@@ -4,10 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:huen_delivery_mobile/exception/UnexpectedResult.dart';
 import 'package:huen_delivery_mobile/models/result_status.dart';
 import 'package:huen_delivery_mobile/network/auth_network.dart';
-import 'package:localstorage/localstorage.dart';
+import 'package:huen_delivery_mobile/util/token.dart';
 
 class LoginViewModel {
-  final LocalStorage storage = new LocalStorage('auth');
   TextEditingController idController = TextEditingController();
   TextEditingController pwController = TextEditingController();
   AuthNetwork _authNetwork = AuthNetwork();
@@ -22,7 +21,7 @@ class LoginViewModel {
       switch (res.statusCode) {
         case 200:
           dynamic data = jsonDecode(res.body)['data'];
-          storage.setItem('token', data['x-access-token']);
+          setToken(data['x-access-token']);
 
           return ResultStatus(res.statusCode, '로그인 성공', true);
 
