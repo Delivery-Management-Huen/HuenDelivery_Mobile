@@ -1,30 +1,30 @@
-import 'package:huen_delivery_mobile/models/delivery.dart';
+import 'dart:convert';
+
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:huen_delivery_mobile/config/config.dart';
+import 'package:huen_delivery_mobile/util/token.dart';
 
 class DeliveryNetwork {
-  Future<List<Delivery>> getDeliveries() async {
-    var d1 = Delivery();
-    var d2 = Delivery();
-    var d3 = Delivery();
-    var d4 = Delivery();
+  Future<http.Response> getDeliveries() async {
+    final res = await http.get('$END_POINT/delivery/my', headers: {
+      'x-access-token': getToken(),
+    });
 
-    d1.id = 1;
+    return res;
+  }
 
-    d2.id = 2;
-    d2.address = '서울시 마포구 영등포역';
+  Future<http.Response> startDelivery(num idx, LatLng location) async {
+    final res = await http.post('$END_POINT/delivery/start/$idx',
+        headers: {
+          'x-access-token': getToken(),
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'lat': location.latitude,
+          'long': location.longitude,
+        }));
 
-    d3.id = 3;
-    d3.address = '서울시 광화문';
-
-    d4.id = 4;
-    d4.address = '대구광역시 수성구 범물동 서한화성아파트';
-
-    var list = [
-      d1,
-      d2,
-      d3,
-      d4,
-    ];
-
-    return list;
+    return res;
   }
 }

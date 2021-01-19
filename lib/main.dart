@@ -3,22 +3,18 @@ import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:huen_delivery_mobile/screens/main_screen.dart';
 import 'package:huen_delivery_mobile/screens/login_screen.dart';
-import 'package:localstorage/localstorage.dart';
+import 'package:huen_delivery_mobile/util/token.dart';
 
 void main() {
   runApp(MyApp());
-
 }
 
 class MyApp extends StatelessWidget {
-  LocalStorage storage = new LocalStorage('auth');
-
   @override
   Widget build(BuildContext context) {
-    bool isTokenExist = storage.getItem('token') != null;
-
+    print(getToken());
     return MaterialApp(
-      home: isTokenExist ? MainScreenWrapper() : LoginScreen(),
+      home: isTokenExist() ? MainScreenWrapper() : LoginScreen(),
       routes: {
         '/main': (context) => MainScreenWrapper(),
         '/login': (context) => LoginScreen(),

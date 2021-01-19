@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:huen_delivery_mobile/components/login/login_view_model.dart';
 import 'package:huen_delivery_mobile/styles/palette.dart';
+import 'package:huen_delivery_mobile/util/dialog.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -97,20 +98,8 @@ class _LoginViewState extends State<LoginView> {
                             .login()
                             .then((value) =>
                                 Navigator.pushNamed(context, '/main'))
-                            .catchError((error) => showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      CupertinoAlertDialog(
-                                    title: Text('로그인 실패'),
-                                    content: Text(error.toString()),
-                                    actions: [
-                                      CupertinoDialogAction(
-                                        child: Text('확인'),
-                                        onPressed: () => Navigator.pop(context),
-                                      ),
-                                    ],
-                                  ),
-                                ));
+                            .catchError((error) => showCustomDialog(
+                                context, '로그인 실패', error.toString()));
                       }),
                 ),
               ],
