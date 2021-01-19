@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:isolate';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -100,7 +101,10 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   _onMapCreated(GoogleMapController controller) {
-    _mapController = controller;
+    print('pass');
+    setState(() {
+      _mapController = controller;
+    });
   }
 
   _moveCamera(num deliveryId) {
@@ -129,37 +133,56 @@ class _MainScreenState extends State<MainScreen> {
     _initMarkers(deliveries);
 
     return Scaffold(
-      body: deliveriesNotifier == null
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : SafeArea(
-            child: Column(
-                children: [
-                  Container(
-                    height: deviceSize.height * 0.6,
-                    child: GoogleMap(
-                      markers: _markers.toSet(),
-                      onMapCreated: _onMapCreated,
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(37.576183893224865, 126.97665492505988),
-                        zoom: 10.0,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: deliveries.length,
-                      itemBuilder: (BuildContext context, int index) =>
-                          DeliveryView(
-                        delivery: deliveries[index],
-                        moveCamera: _moveCamera,
-                      ),
-                    ),
-                  ),
-                ],
+      body: Stack(
+        fit: StackFit.loose,
+        children: [
+          Column(
+            children: [
+              Container(
+                height: deviceSize.height * 0.6,
+                child: getGoogleMap(),
               ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: deliveries.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      DeliveryView(
+                    delivery: deliveries[index],
+                    moveCamera: _moveCamera,
+                  ),
+                ),
+              ),
+            ],
           ),
+          getLoading(deviceSize.width, deviceSize.height),
+        ],
+      ),
     );
+  }
+
+  Widget getGoogleMap() {
+    return GoogleMap(
+      markers: _markers.toSet(),
+      onMapCreated: _onMapCreated,
+      initialCameraPosition: CameraPosition(
+        target: LatLng(37.576183893224865, 126.97665492505988),
+        zoom: 10.0,
+      ),
+    );
+  }
+
+  getLoading(width, height) {
+    if (_mapController == null) {
+      return Container(
+        color: Colors.white,
+        width: width,
+        height: height,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    return Container();
   }
 }

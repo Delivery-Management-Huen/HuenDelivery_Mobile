@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/main': (context) => MainScreenWrapper(),
         '/login': (context) => LoginScreen(),
+        '/camera': (context) => CameraScreen(),
       },
     );
   }

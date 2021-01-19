@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:huen_delivery_mobile/components/delivery/delivery_view_model.dart';
-import 'package:huen_delivery_mobile/exception/TokenException.dart';
 import 'package:huen_delivery_mobile/models/delivery.dart';
 import 'package:huen_delivery_mobile/notifiers/deliveries_notifier.dart';
 import 'package:huen_delivery_mobile/styles/palette.dart';
-import 'package:huen_delivery_mobile/util/dialog.dart';
 import 'package:provider/provider.dart';
 
 class DeliveryView extends StatefulWidget {
@@ -51,7 +49,9 @@ class _DeliveryViewState extends State<DeliveryView> {
                 color: Colors.white,
               ),
             ),
-            onPressed: () => {}),
+            onPressed: () => {
+                  Navigator.pushNamed(context, '/camera'),
+                }),
       );
     }
 
