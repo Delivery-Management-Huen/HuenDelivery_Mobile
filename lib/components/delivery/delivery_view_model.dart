@@ -24,30 +24,5 @@ class DeliveryViewModel {
 
   Delivery get delivery => _delivery;
 
-  Future<Delivery> startDelivery() async {
-    Position position = await getCurrentPosition();
-
-    LatLng location = LatLng(position.latitude, position.longitude);
-    final res = await _deliveryNetwork.startDelivery(_delivery.idx, location);
-
-    switch (res.statusCode) {
-      case 200:
-        delivery.startTime = DateTime.now().toString();
-        return delivery;
-
-      case 400:
-        throw UnexpectedResult('이미 출발한 배송입니다');
-
-      case 401:
-      case 403:
-      case 410:
-        removeToken();
-        throw TokenException('다시 로그인 해주세요');
-
-      default:
-        throw UnexpectedResult('서버 오류가 발생했습니다');
-    }
-  }
-
   endDeliver() {}
 }
