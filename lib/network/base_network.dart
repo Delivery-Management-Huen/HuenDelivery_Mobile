@@ -6,7 +6,7 @@ import 'package:huen_delivery_mobile/config/config.dart';
 getNetwork(String url, {String token = ''}) async {
   Map<String, String> headers = {};
 
-  if (token.length <= 0) {
+  if (token.length > 0) {
     headers['x-access-token'] = token;
   }
 
@@ -18,7 +18,7 @@ postNetwork(String url, dynamic body, {String token = ''}) async {
     'Content-Type': 'application/json',
   };
 
-  if (token.length <= 0) {
+  if (token.length > 0) {
     headers['x-access-token'] = token;
   }
 
