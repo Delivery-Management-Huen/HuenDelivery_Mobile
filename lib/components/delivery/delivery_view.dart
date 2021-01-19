@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:huen_delivery_mobile/components/delivery/delivery_view_model.dart';
 import 'package:huen_delivery_mobile/models/delivery.dart';
 import 'package:huen_delivery_mobile/notifiers/deliveries_notifier.dart';
+import 'package:huen_delivery_mobile/notifiers/end_delivery_notifier.dart';
 import 'package:huen_delivery_mobile/styles/palette.dart';
 import 'package:provider/provider.dart';
 
@@ -33,8 +34,8 @@ class _DeliveryViewState extends State<DeliveryView> {
 
   @override
   Widget build(BuildContext context) {
-    DeliveriesNotifier deliveriesNotifier =
-        Provider.of<DeliveriesNotifier>(context);
+    EndDeliveryNotifier endDeliveryNotifier =
+        Provider.of<EndDeliveryNotifier>(context);
 
     generateEndButton() {
       return ButtonTheme(
@@ -49,9 +50,10 @@ class _DeliveryViewState extends State<DeliveryView> {
                 color: Colors.white,
               ),
             ),
-            onPressed: () => {
-                  Navigator.pushNamed(context, '/camera'),
-                }),
+            onPressed: () {
+              endDeliveryNotifier.setDelivery(deliveryViewModel.delivery);
+              Navigator.pushNamed(context, '/camera');
+            }),
       );
     }
 

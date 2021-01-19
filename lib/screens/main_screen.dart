@@ -10,6 +10,7 @@ import 'package:huen_delivery_mobile/components/delivery/delivery_view.dart';
 import 'package:huen_delivery_mobile/exception/TokenException.dart';
 import 'package:huen_delivery_mobile/models/delivery.dart';
 import 'package:huen_delivery_mobile/notifiers/deliveries_notifier.dart';
+import 'package:huen_delivery_mobile/notifiers/end_delivery_notifier.dart';
 import 'package:huen_delivery_mobile/util/dialog.dart';
 import 'package:huen_delivery_mobile/util/token.dart';
 import 'package:provider/provider.dart';
@@ -146,9 +147,12 @@ class _MainScreenState extends State<MainScreen> {
                 child: ListView.builder(
                   itemCount: deliveries.length,
                   itemBuilder: (BuildContext context, int index) =>
-                      DeliveryView(
-                    delivery: deliveries[index],
-                    moveCamera: _moveCamera,
+                      ChangeNotifierProvider(
+                    create: (context) => EndDeliveryNotifier(),
+                    child: DeliveryView(
+                      delivery: deliveries[index],
+                      moveCamera: _moveCamera,
+                    ),
                   ),
                 ),
               ),
