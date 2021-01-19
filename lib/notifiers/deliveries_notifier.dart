@@ -13,11 +13,8 @@ class DeliveriesNotifier with ChangeNotifier {
   GoogleThirdParty _googleThirdParty = new GoogleThirdParty();
 
   List<Delivery> _deliveries = [];
-  bool occurError = false;
 
   Future<void> fetchDeliveries() async {
-    _deliveries = [];
-
     final res = await _deliveryNetwork.getDeliveries();
 
     if (res.statusCode == 200) {

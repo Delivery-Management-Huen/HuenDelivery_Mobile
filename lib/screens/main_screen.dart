@@ -133,31 +133,33 @@ class _MainScreenState extends State<MainScreen> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : Column(
-              children: [
-                Container(
-                  height: deviceSize.height * 0.6,
-                  child: GoogleMap(
-                    markers: _markers.toSet(),
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: LatLng(37.576183893224865, 126.97665492505988),
-                      zoom: 10.0,
+          : SafeArea(
+            child: Column(
+                children: [
+                  Container(
+                    height: deviceSize.height * 0.6,
+                    child: GoogleMap(
+                      markers: _markers.toSet(),
+                      onMapCreated: _onMapCreated,
+                      initialCameraPosition: CameraPosition(
+                        target: LatLng(37.576183893224865, 126.97665492505988),
+                        zoom: 10.0,
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: deliveries.length,
-                    itemBuilder: (BuildContext context, int index) =>
-                        DeliveryView(
-                      delivery: deliveries[index],
-                      moveCamera: _moveCamera,
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: deliveries.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          DeliveryView(
+                        delivery: deliveries[index],
+                        moveCamera: _moveCamera,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+          ),
     );
   }
 }
