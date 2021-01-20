@@ -24,6 +24,7 @@ class Delivery {
   });
 
   factory Delivery.fromJson(Map<String, dynamic> json) {
+  print(json['image']);
     return Delivery(
         idx: json['idx'],
         productName: json['productName'],

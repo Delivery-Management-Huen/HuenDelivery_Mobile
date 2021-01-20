@@ -33,7 +33,7 @@ class EndDeliveryNotifier with ChangeNotifier {
     String fileName = '';
     try {
       final res = await _uploadNetwork.upload(_image);
-      fileName = jsonDecode(res.body)['data']['file']['originalname'];
+      fileName = jsonDecode(res.body)['data']['file']['filename'];
     } catch (err) { }
 
     final res = await _deliveryNetwork.endDelivery(_delivery.idx, fileName);
