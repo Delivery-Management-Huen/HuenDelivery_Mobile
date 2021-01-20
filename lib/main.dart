@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:huen_delivery_mobile/screens/main_screen.dart';
 import 'package:huen_delivery_mobile/screens/login_screen.dart';
+import 'package:huen_delivery_mobile/screens/order_delivery_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/main': (context) => MainScreenWrapper(),
         '/login': (context) => LoginScreen(),
+        '/order': (context) => OrderDeliveryScreenWrapper(),
       },
     );
   }

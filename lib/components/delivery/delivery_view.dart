@@ -115,7 +115,7 @@ class _DeliveryViewState extends State<DeliveryView> {
                       ),
                       SizedBox(width: 10),
                       Text(
-                        deliveryViewModel.delivery.productName,
+                        deliveryViewModel.delivery.customer.id,
                         style: TextStyle(
                           fontSize: 11,
                           color: Palette.gray444444,

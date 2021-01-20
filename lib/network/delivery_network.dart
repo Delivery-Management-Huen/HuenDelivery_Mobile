@@ -21,4 +21,24 @@ class DeliveryNetwork {
 
     return res;
   }
+
+  Future<http.Response> getCompletedDeliveries() async {
+    final res =
+        await getNetwork('/delivery/my/completed', token: await getToken());
+
+    return res;
+  }
+
+  Future<http.Response> reorderDeliveries(List<dynamic> orders) async {
+    final res = await postNetwork(
+        '/delivery/order',
+        {
+          'orders': orders,
+        },
+        token: await getToken());
+
+    print(res.statusCode);
+    print(res.body);
+    return res;
+  }
 }
