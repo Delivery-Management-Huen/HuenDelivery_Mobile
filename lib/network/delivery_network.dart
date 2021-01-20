@@ -6,7 +6,7 @@ import 'package:huen_delivery_mobile/util/token.dart';
 
 class DeliveryNetwork {
   Future<http.Response> getDeliveries() async {
-    final res = await getNetwork('/delivery/my', token: getToken());
+    final res = await getNetwork('/delivery/my', token: await getToken());
 
     return res;
   }
@@ -17,7 +17,7 @@ class DeliveryNetwork {
         {
           'image': image,
         },
-        token: getToken());
+        token: await getToken());
 
     return res;
   }

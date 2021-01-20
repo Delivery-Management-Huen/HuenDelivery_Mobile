@@ -60,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
         await deliveriesNotifier.fetchDeliveries();
       } catch (err) {
         if (err is TokenException) {
-          Navigator.pushNamed(context, '/login');
+          Navigator.pushNamedAndRemoveUntil(context, '/login', (router) => false);
           showCustomDialog(context, '세션 만료', '다시 로그인해주세요');
         } else {
           showCustomDialog(context, '오류 발생', err.toString());
@@ -102,7 +102,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   _onMapCreated(GoogleMapController controller) {
-    print('pass');
     setState(() {
       _mapController = controller;
     });

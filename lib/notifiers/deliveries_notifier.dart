@@ -42,7 +42,7 @@ class DeliveriesNotifier with ChangeNotifier {
       case 401:
       case 403:
       case 410:
-        removeToken();
+        await removeToken();
         throw TokenException('다시 로그인 해주세요');
 
       default:
