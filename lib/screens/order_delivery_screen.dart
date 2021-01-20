@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:huen_delivery_mobile/config/config.dart';
 import 'package:huen_delivery_mobile/exception/TokenException.dart';
 import 'package:huen_delivery_mobile/models/delivery.dart';
 import 'package:huen_delivery_mobile/notifiers/order_delivery_notifier.dart';
@@ -62,14 +66,11 @@ class _OrderDeliveryScreenState extends State<OrderDeliveryScreen> {
       body: Column(
         children: [
           Container(
-            margin: const EdgeInsets.only(top: 50),
-            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
+            padding:
+                const EdgeInsets.only(top: 50, left: 10, right: 10, bottom: 20),
             decoration: BoxDecoration(
-                border: Border(
-              bottom: BorderSide(
-                color: Palette.gray8E8E8E,
-              ),
-            )),
+              color: Palette.gray141414,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -77,7 +78,7 @@ class _OrderDeliveryScreenState extends State<OrderDeliveryScreen> {
                 Text(
                   '순서대로 정렬해주세요',
                   style: TextStyle(
-                    color: Palette.gray141414,
+                    color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -132,52 +133,73 @@ class _OrderDeliveryScreenState extends State<OrderDeliveryScreen> {
             child: RefreshIndicator(
               onRefresh: () => _fetchDeliveries(context),
               child: ReorderableListView(
+                padding: const EdgeInsets.symmetric(vertical: 30.0),
                 children: [
                   for (final item in deliveries)
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Palette.grayDCDCDC,
-                          ),
-                        ),
-                      ),
+                    GestureDetector(
                       key: ValueKey(item),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                item.productName,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Palette.gray141414,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                      onTap: () => showDialog(
+                        context: context,
+                        builder: (_) {
+                          return Dialog(
+                            child: Container(
+                              width: 200,
+                              height: 400,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage('$SERVER_IP/static/${item.image}'),
+                                  fit: BoxFit.cover,
+                                )
                               ),
-                              SizedBox(width: 10),
-                              Text(
-                                item.customer.id,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Palette.gray444444,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            item.customer.address,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Palette.gray444444,
+                            ),
+                          );
+                        },
+                      ),
+                      child: Container(
+                        height: 80,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Palette.grayDCDCDC,
                             ),
                           ),
-                        ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  item.productName,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Palette.gray141414,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  item.customer.id,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Palette.gray444444,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              item.customer.address,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Palette.gray444444,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                 ],

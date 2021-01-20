@@ -105,12 +105,15 @@ class _DeliveryViewState extends State<DeliveryView> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        deliveryViewModel.delivery.productName,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Palette.gray141414,
-                          fontWeight: FontWeight.bold,
+                      Flexible(
+                        child: Text(
+                          deliveryViewModel.delivery.productName,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Palette.gray141414,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       SizedBox(width: 10),
@@ -126,6 +129,7 @@ class _DeliveryViewState extends State<DeliveryView> {
                   SizedBox(height: 5),
                   Text(
                     deliveryViewModel.delivery.customer.address,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 10,
                       color: Palette.gray444444,
@@ -143,7 +147,10 @@ class _DeliveryViewState extends State<DeliveryView> {
 
   Future getImage() async {
     ImagePicker imagePicker = ImagePicker();
-    final image = await imagePicker.getImage(source: ImageSource.camera);
+    final image = await imagePicker.getImage(
+      source: ImageSource.camera,
+      imageQuality: 1,
+    );
 
     setState(() {
       if (image != null) {

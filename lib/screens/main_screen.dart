@@ -156,8 +156,16 @@ class _MainScreenState extends State<MainScreen> {
               ]),
               Expanded(
                 child: deliveries.length <= 0
-                    ? Center(
-                        child: Text('오늘 배송할 물품이 없습니다'),
+                    ? RefreshIndicator(
+                        onRefresh: () => _fetchDeliveries(context),
+                        child: Stack(
+                          children: [
+                            ListView(),
+                            Center(
+                              child: Text('오늘 배송할 물품이 없습니다'),
+                            ),
+                          ],
+                        ),
                       )
                     : RefreshIndicator(
                         onRefresh: () => _fetchDeliveries(context),
