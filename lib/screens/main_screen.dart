@@ -12,23 +12,10 @@ import 'package:huen_delivery_mobile/models/delivery.dart';
 import 'package:huen_delivery_mobile/notifiers/deliveries_notifier.dart';
 import 'package:huen_delivery_mobile/notifiers/end_delivery_notifier.dart';
 import 'package:huen_delivery_mobile/util/dialog.dart';
+import 'package:huen_delivery_mobile/util/socket.dart';
 import 'package:huen_delivery_mobile/util/token.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-
-// Socket connectSocket(String token) {
-//   /**
-//    * Socket
-//    */
-//   Socket socket = io(
-//       'http://192.168.3.110:8080/driver',
-//       OptionBuilder().setTransports(['websocket']).setQuery(
-//           {'x-access-token': token}).build());
-//
-//   socket.connect();
-//
-//   return socket;
-// }
 
 class MainScreenWrapper extends StatelessWidget {
   @override
@@ -49,13 +36,29 @@ class _MainScreenState extends State<MainScreen> {
   final List<Marker> _markers = [];
   GoogleMapController _mapController;
 
+  handleDeliveryCreated(data) {
+    DeliveriesNotifier deliveriesNotifier =
+        Provider.of<DeliveriesNotifier>(context, listen: false);
+
+    List deliveries =
+        (data['data'] as List).map((e) => Delivery.fromJson(e)).toList();
+
+    deliveriesNotifier.addDeliveries(deliveries);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      showCustomDialog(context, '알림', '새로운 배송이 접수되었어요');
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await _fetchDeliveries(context);
     });
-    // _initSocket();
+
+    getToken()
+        .then((value) => connectDeliverySocket(value, handleDeliveryCreated));
   }
 
   Future<void> _fetchDeliveries(BuildContext context) async {
@@ -73,16 +76,6 @@ class _MainScreenState extends State<MainScreen> {
       }
     }
   }
-
-  // _initSocket() {
-  //   Socket socket = connectSocket(getToken());
-  //   Timer.periodic(Duration(seconds: 5), (timer) {
-  //     getCurrentPosition().then(
-  //       (value) => socket.emit('send-driver-location',
-  //           {'lat': value.latitude, 'long': value.longitude}),
-  //     );
-  //   });
-  // }
 
   _initMarkers(List<Delivery> deliveries) {
     _markers.clear();

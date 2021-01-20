@@ -64,6 +64,14 @@ class DeliveriesNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  void addDeliveries(List deliveries) {
+    deliveries.forEach((element) {
+      _deliveries.add(element);
+    });
+
+    notifyListeners();
+  }
+
   void removeDelivery(Delivery delivery) {
     int arrayIndex = _deliveries.indexWhere((e) => e.idx == delivery.idx);
     _deliveries.removeAt(arrayIndex);
@@ -76,4 +84,5 @@ class DeliveriesNotifier with ChangeNotifier {
 
     notifyListeners();
   }
+
 }
