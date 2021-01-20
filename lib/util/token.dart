@@ -1,25 +1,19 @@
 import 'package:localstorage/localstorage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-String getToken() {
-  LocalStorage storage = new LocalStorage('auth');
-  return storage.getItem('token');
+Future<String> getToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('token');
+  return token;
 }
 
-void setToken(String token) {
-  LocalStorage storage = new LocalStorage('auth');
-  storage.setItem('token', token);
+Future<void> setToken(String token) async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setString('token', token);
 }
 
-void removeToken() {
-  LocalStorage storage = new LocalStorage('auth');
-  storage.deleteItem('token');
+Future<void> removeToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.remove('token');
 }
 
-bool isTokenExist() {
-  String token = getToken();
-  if (token == null) {
-    return false;
-  }
-
-  return true;
-}

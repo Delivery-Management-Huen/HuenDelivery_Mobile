@@ -13,11 +13,8 @@ class DeliveriesNotifier with ChangeNotifier {
   GoogleThirdParty _googleThirdParty = new GoogleThirdParty();
 
   List<Delivery> _deliveries = [];
-  bool occurError = false;
 
   Future<void> fetchDeliveries() async {
-    _deliveries = [];
-
     final res = await _deliveryNetwork.getDeliveries();
 
     if (res.statusCode == 200) {
@@ -45,7 +42,7 @@ class DeliveriesNotifier with ChangeNotifier {
       case 401:
       case 403:
       case 410:
-        removeToken();
+        await removeToken();
         throw TokenException('다시 로그인 해주세요');
 
       default:
@@ -55,7 +52,7 @@ class DeliveriesNotifier with ChangeNotifier {
 
   List<Delivery> getDeliveries() {
     return _deliveries;
-}
+  }
 
   void setDeliveries(List<Delivery> deliveries) {
     _deliveries = deliveries;
@@ -64,6 +61,12 @@ class DeliveriesNotifier with ChangeNotifier {
 
   void addDelivery(Delivery delivery) {
     _deliveries.add(delivery);
+    notifyListeners();
+  }
+
+  void removeDelivery(Delivery delivery) {
+    int arrayIndex = _deliveries.indexWhere((e) => e.idx == delivery.idx);
+    _deliveries.removeAt(arrayIndex);
     notifyListeners();
   }
 

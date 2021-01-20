@@ -1,19 +1,24 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:huen_delivery_mobile/components/delivery/delivery_view_model.dart';
 import 'package:huen_delivery_mobile/exception/TokenException.dart';
 import 'package:huen_delivery_mobile/models/delivery.dart';
 import 'package:huen_delivery_mobile/notifiers/deliveries_notifier.dart';
+import 'package:huen_delivery_mobile/notifiers/end_delivery_notifier.dart';
 import 'package:huen_delivery_mobile/styles/palette.dart';
 import 'package:huen_delivery_mobile/util/dialog.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class DeliveryView extends StatefulWidget {
   final Delivery delivery;
   final Function moveCamera;
+  final Key key;
 
   DeliveryView({
     @required this.delivery,
+    @required this.key,
     this.moveCamera,
   });
 
@@ -25,6 +30,7 @@ class DeliveryView extends StatefulWidget {
 class _DeliveryViewState extends State<DeliveryView> {
   Delivery delivery;
   Function moveCamera;
+  File _image;
 
   DeliveryViewModel deliveryViewModel;
 
@@ -35,39 +41,11 @@ class _DeliveryViewState extends State<DeliveryView> {
 
   @override
   Widget build(BuildContext context) {
+    EndDeliveryNotifier endDeliveryNotifier =
+        Provider.of<EndDeliveryNotifier>(context);
+
     DeliveriesNotifier deliveriesNotifier =
         Provider.of<DeliveriesNotifier>(context);
-
-    generateStartButton() {
-      return ButtonTheme(
-        buttonColor: Palette.grayDCDCDC,
-        minWidth: 60,
-        height: 25,
-        child: RaisedButton(
-            child: Text(
-              '출발',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.white,
-              ),
-            ),
-            onPressed: () {
-              deliveryViewModel
-                  .startDelivery()
-                  .then((value) =>
-                      deliveriesNotifier.updateDelivery(value.idx, value))
-                  .catchError(
-                (error) {
-                  showCustomDialog(context, '세션 만료', '다시 로그인해주세요');
-                },
-                test: (e) => e is TokenException,
-              ).catchError(
-                (error) => showCustomDialog(context, '출발 실패', error.toString()),
-                test: (e) => e is Exception,
-              );
-            }),
-      );
-    }
 
     generateEndButton() {
       return ButtonTheme(
@@ -76,13 +54,31 @@ class _DeliveryViewState extends State<DeliveryView> {
         height: 25,
         child: RaisedButton(
             child: Text(
-              '도착',
+              '배송 완료',
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.white,
               ),
             ),
-            onPressed: () => {}),
+            onPressed: () async {
+              endDeliveryNotifier.setDelivery(deliveryViewModel.delivery);
+              await getImage();
+              if (_image != null) {
+                try {
+                  endDeliveryNotifier.setImage(_image);
+                  await endDeliveryNotifier.endDelivery();
+                  deliveriesNotifier.removeDelivery(deliveryViewModel.delivery);
+                } catch (err) {
+                  if (err is TokenException) {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/login', (router) => false);
+                    showCustomDialog(context, '세션 만료', '다시 로그인해주세요');
+                  } else {
+                    showCustomDialog(context, '배송 완료 실패', err.toString());
+                  }
+                }
+              }
+            }),
       );
     }
 
@@ -138,12 +134,21 @@ class _DeliveryViewState extends State<DeliveryView> {
                 ],
               ),
             ),
-            delivery.startTime == null
-                ? generateStartButton()
-                : generateEndButton(),
+            generateEndButton(),
           ],
         ),
       ),
     );
+  }
+
+  Future getImage() async {
+    ImagePicker imagePicker = ImagePicker();
+    final image = await imagePicker.getImage(source: ImageSource.camera);
+
+    setState(() {
+      if (image != null) {
+        _image = File(image.path);
+      }
+    });
   }
 }

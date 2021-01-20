@@ -7,9 +7,15 @@ import 'package:huen_delivery_mobile/network/auth_network.dart';
 import 'package:huen_delivery_mobile/util/token.dart';
 
 class LoginViewModel {
-  TextEditingController idController = TextEditingController();
-  TextEditingController pwController = TextEditingController();
-  AuthNetwork _authNetwork = AuthNetwork();
+  TextEditingController idController;
+  TextEditingController pwController;
+  AuthNetwork _authNetwork;
+
+  LoginViewModel() {
+    idController = TextEditingController();
+    pwController = TextEditingController();
+    _authNetwork = AuthNetwork();
+  }
 
   Future<ResultStatus> login() async {
     String id = idController.text;

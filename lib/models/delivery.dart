@@ -2,11 +2,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:huen_delivery_mobile/models/user.dart';
 
 class Delivery {
-  num idx;
+  int idx;
   String productName;
-  double distance;
-  String startAddress;
-  String startTime;
+  String image;
+  int endOrderNumber;
+  String createdAt;
   String endTime;
   User driver;
   User customer;
@@ -17,15 +17,19 @@ class Delivery {
     this.productName,
     this.customer,
     this.driver,
+    this.endOrderNumber,
+    this.image,
+    this.createdAt,
     this.endTime,
-    this.startTime,
   });
 
   factory Delivery.fromJson(Map<String, dynamic> json) {
     return Delivery(
         idx: json['idx'],
         productName: json['productName'],
-        startTime: json['startTime'],
+        image: json['image'],
+        endOrderNumber: json['endOrderNumber'],
+        createdAt: json['createdAt'],
         endTime: json['endTime'],
         driver: User.fromJson(json['driver']),
         customer: User.fromJson(json['customer']));
