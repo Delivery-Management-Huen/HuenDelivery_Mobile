@@ -28,7 +28,7 @@ class _LoginViewState extends State<LoginView> {
 
     return Container(
       width: deviceSize.width,
-      color: Colors.white,
+      color: Palette.blueE5E5E5,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

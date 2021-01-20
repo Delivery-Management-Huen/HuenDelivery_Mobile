@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:huen_delivery_mobile/config/config.dart';
@@ -172,12 +171,15 @@ class _OrderDeliveryScreenState extends State<OrderDeliveryScreen> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Text(
-                                  item.productName,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Palette.gray141414,
-                                    fontWeight: FontWeight.bold,
+                                Flexible(
+                                  child: Text(
+                                    item.productName,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Palette.gray141414,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(width: 10),
