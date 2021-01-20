@@ -52,7 +52,7 @@ class DeliveriesNotifier with ChangeNotifier {
 
   List<Delivery> getDeliveries() {
     return _deliveries;
-}
+  }
 
   void setDeliveries(List<Delivery> deliveries) {
     _deliveries = deliveries;
@@ -61,6 +61,12 @@ class DeliveriesNotifier with ChangeNotifier {
 
   void addDelivery(Delivery delivery) {
     _deliveries.add(delivery);
+    notifyListeners();
+  }
+
+  void removeDelivery(Delivery delivery) {
+    int arrayIndex = _deliveries.indexWhere((e) => e.idx == delivery.idx);
+    _deliveries.removeAt(arrayIndex);
     notifyListeners();
   }
 

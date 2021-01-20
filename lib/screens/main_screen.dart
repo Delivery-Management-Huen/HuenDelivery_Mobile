@@ -52,23 +52,26 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await _fetchDeliveries(context);
+    });
+    // _initSocket();
+  }
+
+  Future<void> _fetchDeliveries(BuildContext context) async {
     DeliveriesNotifier deliveriesNotifier =
         Provider.of<DeliveriesNotifier>(context, listen: false);
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      try {
-        await deliveriesNotifier.fetchDeliveries();
-      } catch (err) {
-        if (err is TokenException) {
-          Navigator.pushNamedAndRemoveUntil(context, '/login', (router) => false);
-          showCustomDialog(context, '세션 만료', '다시 로그인해주세요');
-        } else {
-          showCustomDialog(context, '오류 발생', err.toString());
-        }
+    try {
+      await deliveriesNotifier.fetchDeliveries();
+    } catch (err) {
+      if (err is TokenException) {
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (router) => false);
+        showCustomDialog(context, '세션 만료', '다시 로그인해주세요');
+      } else {
+        showCustomDialog(context, '오류 발생', err.toString());
       }
-    });
-
-    // _initSocket();
+    }
   }
 
   // _initSocket() {
@@ -133,27 +136,36 @@ class _MainScreenState extends State<MainScreen> {
     _initMarkers(deliveries);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         fit: StackFit.loose,
         children: [
           Column(
             children: [
               Container(
-                height: deviceSize.height * 0.6,
+                height: deviceSize.height * 0.65,
                 child: getGoogleMap(),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: deliveries.length,
-                  itemBuilder: (BuildContext context, int index) =>
-                      ChangeNotifierProvider(
-                    create: (context) => EndDeliveryNotifier(),
-                    child: DeliveryView(
-                      delivery: deliveries[index],
-                      moveCamera: _moveCamera,
-                    ),
-                  ),
-                ),
+                child: deliveries.length <= 0
+                    ? Center(
+                        child: Text('오늘 배송할 물품이 없습니다'),
+                      )
+                    : RefreshIndicator(
+                        onRefresh: () => _fetchDeliveries(context),
+                        child: ListView.builder(
+                          itemCount: deliveries.length,
+                          itemBuilder: (BuildContext context, int index) =>
+                              ChangeNotifierProvider(
+                            create: (context) => EndDeliveryNotifier(),
+                            child: DeliveryView(
+                              key: ObjectKey(deliveries[index]),
+                              delivery: deliveries[index],
+                              moveCamera: _moveCamera,
+                            ),
+                          ),
+                        ),
+                      ),
               ),
             ],
           ),
@@ -176,6 +188,7 @@ class _MainScreenState extends State<MainScreen> {
 
   getLoading(width, height) {
     if (_mapController == null) {
+      print("loading");
       return Container(
         color: Colors.white,
         width: width,

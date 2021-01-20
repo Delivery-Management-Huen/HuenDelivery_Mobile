@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:huen_delivery_mobile/config/config.dart';
 
 class UploadNetwork {
-  Future<void> upload(File image) async {
+  Future<http.Response> upload(File image) async {
     final stream =
         new http.ByteStream(DelegatingStream.typed(image.openRead()));
     final length = await image.length();
@@ -19,9 +19,9 @@ class UploadNetwork {
         filename: basename(image.path));
 
     request.files.add(multipartFile);
-    http.Response response =
+    final res =
         await http.Response.fromStream(await request.send());
-    print(response.statusCode);
-    print(jsonDecode(response.body)['data']['file']['originalname']);
+
+    return res;
   }
 }
