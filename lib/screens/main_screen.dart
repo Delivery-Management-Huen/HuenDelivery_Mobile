@@ -11,6 +11,7 @@ import 'package:huen_delivery_mobile/exception/TokenException.dart';
 import 'package:huen_delivery_mobile/models/delivery.dart';
 import 'package:huen_delivery_mobile/notifiers/deliveries_notifier.dart';
 import 'package:huen_delivery_mobile/notifiers/end_delivery_notifier.dart';
+import 'package:huen_delivery_mobile/styles/palette.dart';
 import 'package:huen_delivery_mobile/util/dialog.dart';
 import 'package:huen_delivery_mobile/util/socket.dart';
 import 'package:huen_delivery_mobile/util/token.dart';
@@ -135,10 +136,24 @@ class _MainScreenState extends State<MainScreen> {
         children: [
           Column(
             children: [
-              Container(
-                height: deviceSize.height * 0.65,
-                child: getGoogleMap(),
-              ),
+              Stack(children: [
+                Container(
+                  height: deviceSize.height * 0.65,
+                  child: getGoogleMap(),
+                ),
+                Positioned(
+                  child: GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, '/order'),
+                    child: Icon(
+                      Icons.settings,
+                      size: 28,
+                      color: Palette.gray141414,
+                    ),
+                  ),
+                  top: 30,
+                  left: 10,
+                ),
+              ]),
               Expanded(
                 child: deliveries.length <= 0
                     ? Center(
