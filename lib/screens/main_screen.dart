@@ -16,6 +16,7 @@ import 'package:huen_delivery_mobile/util/dialog.dart';
 import 'package:huen_delivery_mobile/util/socket.dart';
 import 'package:huen_delivery_mobile/util/token.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class MainScreenWrapper extends StatelessWidget {
@@ -143,6 +144,21 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 Positioned(
                   child: GestureDetector(
+                    onTap: () async {
+                      await removeToken();
+                      Navigator.pushNamedAndRemoveUntil(context, '/login', (router) => false);
+                    },
+                    child: Icon(
+                      Icons.logout,
+                      size: 28,
+                      color: Palette.gray141414,
+                    ),
+                  ),
+                  top: 30,
+                  left: 10,
+                ),
+                Positioned(
+                  child: GestureDetector(
                     onTap: () => Navigator.pushNamed(context, '/order'),
                     child: Icon(
                       Icons.settings,
@@ -151,7 +167,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                   ),
                   top: 30,
-                  left: 10,
+                  left: 40,
                 ),
               ]),
               Expanded(

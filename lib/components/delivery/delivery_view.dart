@@ -149,7 +149,7 @@ class _DeliveryViewState extends State<DeliveryView> {
     ImagePicker imagePicker = ImagePicker();
     final image = await imagePicker.getImage(
       source: ImageSource.camera,
-      imageQuality: 1,
+      imageQuality: 20,
     );
 
     setState(() {
