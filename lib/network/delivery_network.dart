@@ -26,6 +26,7 @@ class DeliveryNetwork {
     final res =
         await getNetwork('/delivery/my/completed', token: await getToken());
 
+    print(res.body);
     return res;
   }
 

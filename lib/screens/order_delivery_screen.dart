@@ -86,7 +86,10 @@ class _OrderDeliveryScreenState extends State<OrderDeliveryScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Icon(Icons.refresh, color: Colors.white,),
+                      Icon(
+                        Icons.refresh,
+                        color: Colors.white,
+                      ),
                     ],
                   ),
                 ),
@@ -190,7 +193,7 @@ class _OrderDeliveryScreenState extends State<OrderDeliveryScreen> {
                               ),
                               SizedBox(width: 10),
                               Text(
-                                item.customer.id,
+                                item.customer.name,
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Palette.gray444444,
