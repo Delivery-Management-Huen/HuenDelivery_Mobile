@@ -60,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
     });
 
     getToken()
-        .then((value) => connectDeliverySocket(value, handleDeliveryCreated));
+        .then((value) => connectSocket(value, handleDeliveryCreated));
   }
 
   Future<void> _fetchDeliveries(BuildContext context) async {
