@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCAION" />
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="huen_delivery_mobile"
+        android:label="TMS"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
 

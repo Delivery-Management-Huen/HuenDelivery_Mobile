@@ -74,12 +74,20 @@ class _OrderDeliveryScreenState extends State<OrderDeliveryScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  '순서대로 정렬해주세요',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                GestureDetector(
+                  onTap: () => _fetchDeliveries(context),
+                  child: Row(
+                    children: [
+                      Text(
+                        '순서대로 정렬해주세요',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Icon(Icons.refresh, color: Colors.white,),
+                    ],
                   ),
                 ),
                 Row(
@@ -129,89 +137,81 @@ class _OrderDeliveryScreenState extends State<OrderDeliveryScreen> {
             ),
           ),
           Expanded(
-            child: RefreshIndicator(
-              onRefresh: () => _fetchDeliveries(context),
-              child: Stack(
-                children: [
-                  ReorderableListView(
-                    padding: const EdgeInsets.symmetric(vertical: 30.0),
-                    children: [
-                      for (final item in deliveries)
-                        GestureDetector(
-                          key: ValueKey(item),
-                          onTap: () => showDialog(
-                            context: context,
-                            builder: (_) {
-                              return Dialog(
-                                child: Container(
-                                  width: 200,
-                                  height: 400,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                    image: NetworkImage(
-                                        '$SERVER_IP/static/${item.image}'),
-                                    fit: BoxFit.cover,
-                                  )),
-                                ),
-                              );
-                            },
-                          ),
+            child: ReorderableListView(
+              padding: const EdgeInsets.symmetric(vertical: 30.0),
+              children: [
+                for (final item in deliveries)
+                  GestureDetector(
+                    key: ValueKey(item),
+                    onTap: () => showDialog(
+                      context: context,
+                      builder: (_) {
+                        return Dialog(
                           child: Container(
-                            height: 80,
-                            padding: const EdgeInsets.all(12),
+                            width: 200,
+                            height: 400,
                             decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Palette.grayDCDCDC,
-                                ),
-                              ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Flexible(
-                                      child: Text(
-                                        item.productName,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: Palette.gray141414,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      item.customer.id,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Palette.gray444444,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  item.customer.address,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Palette.gray444444,
-                                  ),
-                                ),
-                              ],
-                            ),
+                                image: DecorationImage(
+                              image: NetworkImage(
+                                  '$SERVER_IP/static/${item.image}'),
+                              fit: BoxFit.cover,
+                            )),
+                          ),
+                        );
+                      },
+                    ),
+                    child: Container(
+                      height: 80,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Palette.grayDCDCDC,
                           ),
                         ),
-                    ],
-                    onReorder: orderDeliveryNotifier.reorderData,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  item.productName,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Palette.gray141414,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                item.customer.id,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Palette.gray444444,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            item.customer.address,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Palette.gray444444,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  ListView(),
-                ],
-              ),
+              ],
+              onReorder: orderDeliveryNotifier.reorderData,
             ),
           ),
         ],
