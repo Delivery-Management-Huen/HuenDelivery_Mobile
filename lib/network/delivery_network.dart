@@ -37,8 +37,6 @@ class DeliveryNetwork {
         },
         token: await getToken());
 
-    print(res.statusCode);
-    print(res.body);
     return res;
   }
 }

@@ -131,81 +131,86 @@ class _OrderDeliveryScreenState extends State<OrderDeliveryScreen> {
           Expanded(
             child: RefreshIndicator(
               onRefresh: () => _fetchDeliveries(context),
-              child: ReorderableListView(
-                padding: const EdgeInsets.symmetric(vertical: 30.0),
+              child: Stack(
                 children: [
-                  for (final item in deliveries)
-                    GestureDetector(
-                      key: ValueKey(item),
-                      onTap: () => showDialog(
-                        context: context,
-                        builder: (_) {
-                          return Dialog(
-                            child: Container(
-                              width: 200,
-                              height: 400,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage('$SERVER_IP/static/${item.image}'),
-                                  fit: BoxFit.cover,
-                                )
+                  ReorderableListView(
+                    padding: const EdgeInsets.symmetric(vertical: 30.0),
+                    children: [
+                      for (final item in deliveries)
+                        GestureDetector(
+                          key: ValueKey(item),
+                          onTap: () => showDialog(
+                            context: context,
+                            builder: (_) {
+                              return Dialog(
+                                child: Container(
+                                  width: 200,
+                                  height: 400,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                    image: NetworkImage(
+                                        '$SERVER_IP/static/${item.image}'),
+                                    fit: BoxFit.cover,
+                                  )),
+                                ),
+                              );
+                            },
+                          ),
+                          child: Container(
+                            height: 80,
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Palette.grayDCDCDC,
+                                ),
                               ),
                             ),
-                          );
-                        },
-                      ),
-                      child: Container(
-                        height: 80,
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              color: Palette.grayDCDCDC,
-                            ),
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Flexible(
-                                  child: Text(
-                                    item.productName,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Palette.gray141414,
-                                      fontWeight: FontWeight.bold,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        item.productName,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Palette.gray141414,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      item.customer.id,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Palette.gray444444,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(width: 10),
+                                SizedBox(height: 10),
                                 Text(
-                                  item.customer.id,
+                                  item.customer.address,
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 14,
                                     color: Palette.gray444444,
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(height: 10),
-                            Text(
-                              item.customer.address,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Palette.gray444444,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
+                    ],
+                    onReorder: orderDeliveryNotifier.reorderData,
+                  ),
+                  ListView(),
                 ],
-                onReorder: orderDeliveryNotifier.reorderData,
               ),
             ),
           ),

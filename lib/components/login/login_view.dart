@@ -97,7 +97,7 @@ class _LoginViewState extends State<LoginView> {
                         _loginViewModel
                             .login()
                             .then((value) =>
-                                Navigator.pushNamed(context, '/main'))
+                                Navigator.pushNamedAndRemoveUntil(context, '/main', (router) => false))
                             .catchError((error) => showCustomDialog(
                                 context, '로그인 실패', error.toString()));
                       }),

@@ -220,7 +220,6 @@ class _MainScreenState extends State<MainScreen> {
 
   getLoading(width, height) {
     if (_mapController == null) {
-      print("loading");
       return Container(
         color: Colors.white,
         width: width,
