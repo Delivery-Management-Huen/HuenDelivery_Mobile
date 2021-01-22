@@ -65,11 +65,20 @@ class DeliveriesNotifier with ChangeNotifier {
   }
 
   void addDeliveries(List deliveries) {
-    deliveries.forEach((element) {
-      _deliveries.add(element);
+    deliveries.forEach((delivery) {
+      _deliveries.add(delivery);
     });
 
     notifyListeners();
+
+    _deliveries.forEach((delivery) {
+      _googleThirdParty
+          .convertAddress(delivery.customer.address)
+          .then((addressPoint) {
+        delivery.addressPoint = addressPoint;
+        notifyListeners();
+      });
+    });
   }
 
   void removeDelivery(Delivery delivery) {
