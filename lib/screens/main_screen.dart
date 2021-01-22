@@ -47,6 +47,23 @@ class _MainScreenState extends State<MainScreen> {
 
     deliveriesNotifier.addDeliveries(deliveries);
 
+    for (Delivery delivery in deliveries) {
+      Marker marker = Marker(
+        markerId: MarkerId(delivery.idx.toString()),
+        position: delivery.addressPoint,
+        infoWindow: InfoWindow(
+          title: delivery.productName,
+          snippet: delivery.customer.address,
+        ),
+      );
+
+      setState(() {
+        if (marker.position != null) {
+          _markers.add(marker);
+        }
+      });
+    }
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       showCustomDialog(context, '알림', '새로운 배송이 접수되었어요');
     });
@@ -59,8 +76,7 @@ class _MainScreenState extends State<MainScreen> {
       await _fetchDeliveries(context);
     });
 
-    getToken()
-        .then((value) => connectSocket(value, handleDeliveryCreated));
+    getToken().then((value) => connectSocket(value, handleDeliveryCreated));
   }
 
   Future<void> _fetchDeliveries(BuildContext context) async {
@@ -146,7 +162,8 @@ class _MainScreenState extends State<MainScreen> {
                   child: GestureDetector(
                     onTap: () async {
                       await removeToken();
-                      Navigator.pushNamedAndRemoveUntil(context, '/login', (router) => false);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/login', (router) => false);
                     },
                     child: Icon(
                       Icons.logout,
